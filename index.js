@@ -21,12 +21,12 @@ const upload = multer({ storage });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/print", upload.single("file"), async (req, res) => {
+app.post("/print/:name", upload.single("file"), async (req, res) => {
   console.log(req.file);
   console.log(
     await PowerShell.$`Get-Content -Path ${
       req.file.path
-    } | Out-Printer -Name ${"Microsoft Print to PDF"}`
+    } | Out-Printer -Name ${req.params.name}`
   );
 
   fs.rmSync(req.file.path);
