@@ -1,10 +1,10 @@
-import express from "express";
+const express = require("express");
 const app = express();
-import os from "os";
-import fs from "fs";
-import multer from "multer";
-import printer from "pdf-to-printer";
-import { randomUUID } from "crypto";
+const os = require("os");
+const fs = require("fs");
+const multer = require("multer");
+const printer = require("pdf-to-printer");
+const { randomUUID } = require("crypto");
 
 const { print } = printer;
 
