@@ -1,11 +1,12 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const os = require("os");
-const fs = require("fs");
-const multer = require("multer");
+import os from "os";
+import fs from "fs";
+import multer from "multer";
+import printer from "pdf-to-printer";
+import { randomUUID } from "crypto";
 
-const { PowerShell } = require("node-powershell");
-const { randomUUID } = require("crypto");
+const { print } = printer;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,16 +24,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post("/print/:name", upload.single("file"), async (req, res) => {
   console.log(req.file);
-  console.log(
-    await PowerShell.$`Get-Content -Path ${
-      req.file.path
-    } | Out-Printer -Name ${req.params.name}`
-  );
-
-  fs.rmSync(req.file.path);
+  print(req.file.path, { printer: req.params.name }).then(() => {
+    fs.rmSync(req.file.path);
+  });
   return res.status(200).json("ok");
 });
 
-app.listen(5000, () => {
-  console.log(`Server started...`);
+app.listen(8383, () => {
+  console.log(`Server started on port 8383`);
 });
