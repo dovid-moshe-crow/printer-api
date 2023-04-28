@@ -20,21 +20,15 @@ struct Args {
 }
 
 fn sumatra_path() -> String {
-    format!(
-        "{}{}",
-        std::env::temp_dir().display(),
-        "sumatra.exe"
-    )
+    format!("{}{}", std::env::temp_dir().display(), "sumatra.exe")
 }
 
 fn create_sumatra() {
     let sumatra = include_bytes!("../Sumatra.exe");
 
-    let mut f = File::create(sumatra_path())
-    .unwrap();
+    let mut f = File::create(sumatra_path()).unwrap();
 
     f.write(sumatra);
-
 }
 
 #[rocket::main]
@@ -64,7 +58,9 @@ async fn printer(mut file: TempFile<'_>, name: &str) -> std::io::Result<()> {
     let child = Command::new("powershell")
         .arg(format!(
             "{} -print-to \"{}\" \"{}\"",
-            sumatra_path(),name, pdf_path
+            sumatra_path(),
+            name,
+            pdf_path
         ))
         .spawn()
         .unwrap();
