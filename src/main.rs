@@ -34,7 +34,6 @@ fn create_sumatra() {
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
     let args = Args::parse();
-
     create_sumatra();
 
     let figment = rocket::Config::figment()
