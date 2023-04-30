@@ -39,6 +39,7 @@ async fn main() -> Result<(), rocket::Error> {
 
     let figment = rocket::Config::figment()
         .merge(("port", args.port))
+        .merge(("address","0.0.0.0"))
         .merge(("limits", Limits::new().limit("file", 40.mebibytes())));
 
     let _rocket = rocket::custom(figment)
