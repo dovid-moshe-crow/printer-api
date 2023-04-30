@@ -29,6 +29,7 @@ fn create_sumatra() {
     let mut f = File::create(sumatra_path()).unwrap();
 
     f.write(sumatra);
+    
 }
 
 #[rocket::main]
