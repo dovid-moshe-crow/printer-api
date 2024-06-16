@@ -56,6 +56,8 @@ async fn printer(mut file: TempFile<'_>, name: &str) -> std::io::Result<()> {
     println!("{}", &pdf_path);
     file.persist_to(&pdf_path).await;
 
+    //-print-settings "3x"
+
     let child = Command::new("powershell")
         .arg(format!(
             "{} -print-to \"{}\" \"{}\"",
@@ -64,7 +66,9 @@ async fn printer(mut file: TempFile<'_>, name: &str) -> std::io::Result<()> {
             pdf_path
         ))
         .spawn()
-        .unwrap();
+        .unwrap().wait();
+
+    //std::fs::remove_file(pdf_path);
 
     Ok(())
 }
