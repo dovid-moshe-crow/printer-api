@@ -50,8 +50,8 @@ async fn main() -> Result<(), rocket::Error> {
     Ok(())
 }
 
-#[post("/printer/<name>", format = "multipart/form-data", data = "<file>")]
-async fn printer(mut file: TempFile<'_>, name: &str) -> std::io::Result<()> {
+#[post("/printer/<name>/<amount>", format = "multipart/form-data", data = "<file>")]
+async fn printer(mut file: TempFile<'_>, name: &str,amount:u32) -> std::io::Result<()> {
     let pdf_path = format!("{}/{}.pdf", std::env::temp_dir().display(), Uuid::new_v4());
     println!("{}", &pdf_path);
     file.persist_to(&pdf_path).await;
@@ -60,9 +60,10 @@ async fn printer(mut file: TempFile<'_>, name: &str) -> std::io::Result<()> {
 
     let child = Command::new("powershell")
         .arg(format!(
-            "{} -print-to \"{}\" \"{}\"",
+            "{} -print-to \"{}\" -print-settings \"{}x\" \"{}\"",
             sumatra_path(),
             name,
+            amount,
             pdf_path
         ))
         .spawn()
